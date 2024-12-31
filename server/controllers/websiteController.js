@@ -1,4 +1,4 @@
-import Website from "../models/Website.js"; // Assuming Website is a model for your websites
+import Website from "../models/websiteModel.js"; // Assuming Website is a model for your websites
 
 // Controller for generating a website
 export const generateWebsiteController = async (req, res) => {
