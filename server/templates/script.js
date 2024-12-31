@@ -4,7 +4,7 @@ let cart = {
 };
 
 function addToCart(productId) {
-  fetch(`http://localhost:3000/api/products/${productId}`)
+  fetch(`https://careeco.onrender.com/api/products/${productId}`)
     .then((response) => response.json())
     .then((product) => {
       const existingItem = cart.items.find((item) => item._id === productId);
@@ -112,7 +112,7 @@ function initializeStripe() {
       errorElement.textContent = error.message;
     } else {
       const response = await fetch(
-        "http://localhost:3000/api/process-payment",
+        "https://careeco.onrender.com/api/process-payment",
         {
           method: "POST",
           headers: {

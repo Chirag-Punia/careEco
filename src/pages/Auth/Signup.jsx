@@ -28,7 +28,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/signup', {
+      const response = await axios.post('https://careeco.onrender.com/api/auth/signup', {
         name: formData.name,
         email: formData.email,
         password: formData.password,
