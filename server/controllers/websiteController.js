@@ -6,7 +6,8 @@ export const generateWebsiteController = async (req, res) => {
     const { businessName, description, colorTheme, layout, products } = req.body;
 
     // Generate website data (HTML & JS files)
-    const websiteData = await generateWebsite({ businessName, description, colorTheme, layout, products });
+    const data = { businessName, description, colorTheme, layout, products };
+    const websiteData = await generateWebsite(data);
 
     // Create a new website in the database
     const newWebsite = new Website({
