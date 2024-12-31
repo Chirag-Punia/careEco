@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= businessName %> - Modern E-commerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '<%= colorTheme.primary %>',
+              'primary-dark': '<%= colorTheme.primaryDark %>',
+              secondary: '<%= colorTheme.secondary %>'
+            },
+            fontFamily: {
+              sans: ['DM Sans', 'sans-serif']
+            }
+          }
+        }
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Modern Header -->
+    <header class="fixed w-full bg-white/80 backdrop-blur-md z-50">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="#" class="text-2xl font-bold text-gray-900"><%= businessName %></a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-gray-600 hover:text-primary transition-colors">Home</a>
+                    <a href="#products" class="text-gray-600 hover:text-primary transition-colors">Products</a>
+                    <a href="#contact" class="text-gray-600 hover:text-primary transition-colors">Contact</a>
+                    <button class="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span id="cart-count" class="absolute -top-1 -right-1 w-5 h-5 text-xs flex items-center justify-center text-white bg-primary rounded-full">0</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Modern Hero -->
+    <section id="home" class="relative min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-50">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557821552-17105176677c')] bg-cover bg-center opacity-5"></div>
+        <div class="relative container mx-auto px-6 pt-32 pb-24">
+            <div class="grid md:grid-cols-2 gap-12 items-center min-h-[calc(100vh-8rem)]">
+                <div>
+                    <h1 class="text-6xl font-bold mb-6 leading-tight"><%= businessName %></h1>
+                    <p class="text-xl text-gray-600 mb-8"><%= description %></p>
+                    <a href="#products" class="inline-flex items-center bg-primary text-white px-8 py-3 rounded-full hover:bg-primary-dark transition-colors">
+                        Shop Now
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary to-indigo-600 rounded-2xl transform rotate-6"></div>
+                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8" alt="Hero" class="relative rounded-2xl shadow-xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Products -->
+    <section id="products" class="py-24">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold mb-4">Featured Products</h2>
+                <p class="text-gray-600">Discover our carefully curated collection of premium products.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <% products.forEach(function(product) { %>
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="relative overflow-hidden rounded-t-xl">
+                            <img src="<%= Object.values(product.imageUrl)[0] %>" alt="<%= product.name %>" class="w-full h-[300px] object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2"><%= product.name %></h3>
+                            <p class="text-gray-600 mb-4"><%= product.description %></p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-primary">$<%= product.price %></span>
+                                <button onclick="addToCart('<%= product._id %>')" class="bg-primary/10 text-primary px-4 py-2 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Contact -->
+    <section id="contact" class="py-24 bg-gradient-to-br from-indigo-50 via-white to-indigo-50">
+        <div class="container mx-auto px-6">
+            <div class="max-w-xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4">Get in Touch</h2>
+                    <p class="text-gray-600">Have questions? We'd love to hear from you.</p>
+                </div>
+                <form id="contact-form" class="space-y-6">
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <input type="text" placeholder="Your Name" required class="w-full px-4 py-3 rounded-lg bg-gray-50 border-0 focus:ring-2 focus:ring-primary">
+                        <input type="email" placeholder="Your Email" required class="mt-4 w-full px-4 py-3 rounded-lg bg-gray-50 border-0 focus:ring-2 focus:ring-primary">
+                        <textarea placeholder="Your Message" required rows="4" class="mt-4 w-full px-4 py-3 rounded-lg bg-gray-50 border-0 focus:ring-2 focus:ring-primary"></textarea>
+                        <button type="submit" class="mt-6 w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition-colors">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Footer -->
+    <footer class="bg-gray-900 text-white py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6"><%= businessName %></h3>
+                    <p class="text-gray-400"><%= description %></p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#home" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="#products" class="text-gray-400 hover:text-primary transition-colors">Products</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Contact</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li>contact@<%= businessName.toLowerCase() %>.com</li>
+                        <li>(555) 123-4567</li>
+                        <li>123 Modern St, City, State</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Newsletter</h4>
+                    <form class="space-y-4">
+                        <div class="relative">
+                            <input type="email" placeholder="Your email" class="w-full px-4 py-3 rounded-lg bg-white/10 border-0 focus:ring-2 focus:ring-primary text-white">
+                            <button type="submit" class="absolute right-2 top-2 bg-primary text-white px-4 py-1 rounded-md hover:bg-primary-dark transition-colors">
+                                Subscribe
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; <%= new Date().getFullYear() %> <%= businessName %>. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

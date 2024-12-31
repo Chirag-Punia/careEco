@@ -28,6 +28,16 @@ export async function generateWebsite(data) {
   const selectedColorTheme = colorThemes[colorTheme];
 
   try {
+    // Set the EJS template based on the layout selection
+    let layoutTemplate = "index.ejs"; // Default template
+    if (layout === "luxury") {
+      layoutTemplate = "luxury.ejs";
+    } else if (layout === "minimal") {
+      layoutTemplate = "minimal.ejs";
+    } else if (layout === "modern") {
+      layoutTemplate = "modern.ejs";
+    }
+
     const updatedProducts = products.map((product) => {
       if (product.imageUrl) {
         product.imageUrl = product.imageUrl;
@@ -35,8 +45,9 @@ export async function generateWebsite(data) {
       return product;
     });
 
+    // Render the appropriate EJS template
     const indexHtml = await ejs.renderFile(
-      path.join(__dirname, "../templates/index.ejs"),
+      path.join(__dirname, `../templates/${layoutTemplate}`), // Dynamically load the correct template
       {
         businessName,
         description,
@@ -46,6 +57,7 @@ export async function generateWebsite(data) {
       }
     );
 
+    // Read the JS file for the website
     const scriptJs = await fs.promises.readFile(
       path.join(__dirname, "../templates/script.js"),
       "utf-8"

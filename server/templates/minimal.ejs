@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= businessName %> - Minimal E-commerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '<%= colorTheme.primary %>',
+              'primary-dark': '<%= colorTheme.primaryDark %>',
+              secondary: '<%= colorTheme.secondary %>'
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body class="font-sans bg-white">
+    <!-- Minimal Header -->
+    <header class="fixed w-full bg-white border-b border-gray-100 z-50">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="#" class="text-2xl font-light tracking-wider"><%= businessName %></a>
+                <div class="hidden md:flex items-center space-x-12">
+                    <a href="#home" class="text-gray-600 hover:text-black transition-colors text-sm">HOME</a>
+                    <a href="#products" class="text-gray-600 hover:text-black transition-colors text-sm">SHOP</a>
+                    <a href="#contact" class="text-gray-600 hover:text-black transition-colors text-sm">CONTACT</a>
+                    <button class="relative group">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span id="cart-count" class="absolute -top-2 -right-2 w-4 h-4 text-xs flex items-center justify-center text-white bg-black rounded-full">0</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Minimal Hero -->
+    <section id="home" class="h-screen flex items-center justify-center bg-secondary">
+        <div class="text-center px-4">
+            <h1 class="text-6xl font-light mb-6"><%= businessName %></h1>
+            <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto"><%= description %></p>
+            <a href="#products" class="inline-block bg-black text-white px-12 py-4 text-sm tracking-wider hover:bg-gray-900 transition-colors">
+                EXPLORE COLLECTION
+            </a>
+        </div>
+    </section>
+
+    <!-- Minimal Products Grid -->
+    <section id="products" class="container mx-auto px-6 py-24">
+        <h2 class="text-3xl font-light text-center mb-16">Collection</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            <% products.forEach(function(product) { %>
+                <div class="group">
+                    <div class="relative overflow-hidden mb-4">
+                        <img src="<%= Object.values(product.imageUrl)[0] %>" alt="<%= product.name %>" class="w-full h-[400px] object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
+                        <button onclick="addToCart('<%= product._id %>')" class="absolute bottom-0 left-0 right-0 bg-black text-white py-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            ADD TO CART
+                        </button>
+                    </div>
+                    <h3 class="text-lg font-light mb-2"><%= product.name %></h3>
+                    <p class="text-gray-600">$<%= product.price %></p>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <!-- Minimal Contact -->
+    <section id="contact" class="bg-secondary py-24">
+        <div class="container mx-auto px-6">
+            <div class="max-w-xl mx-auto text-center">
+                <h2 class="text-3xl font-light mb-12">Get in Touch</h2>
+                <form id="contact-form" class="space-y-6">
+                    <input type="text" placeholder="Name" required class="w-full px-6 py-4 bg-white border-0 focus:ring-0">
+                    <input type="email" placeholder="Email" required class="w-full px-6 py-4 bg-white border-0 focus:ring-0">
+                    <textarea placeholder="Message" required rows="4" class="w-full px-6 py-4 bg-white border-0 focus:ring-0"></textarea>
+                    <button type="submit" class="w-full bg-black text-white py-4 hover:bg-gray-900 transition-colors">
+                        SEND MESSAGE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Minimal Footer -->
+    <footer class="bg-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-sm text-gray-600">&copy; <%= new Date().getFullYear() %> <%= businessName %>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
