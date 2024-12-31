@@ -16,7 +16,7 @@ export default function Generator() {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    (data);
    
   };
 

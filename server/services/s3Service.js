@@ -79,3 +79,40 @@ export async function uploadToS3(
     throw new Error(`Failed to upload to S3: ${error.message}`);
   }
 }
+export async function deleteFilesFromS3(fileKeys) {
+  const bucketName = process.env.AWS_S3_BUCKET;
+
+  if (!Array.isArray(fileKeys)) {
+    fileKeys = [fileKeys];
+  }
+
+  const objectsToDelete = fileKeys.map((key) => ({
+    Key: key,
+  }));
+
+  const params = {
+    Bucket: bucketName,
+    Delete: {
+      Objects: objectsToDelete,
+      Quiet: false,
+    },
+  };
+
+  try {
+    const response = await s3.deleteObjects(params).promise();
+
+    if (response.Errors && response.Errors.length > 0) {
+      throw new Error(
+        `Failed to delete files: ${response.Errors.map((e) => e.Key).join(
+          ", "
+        )}`
+      );
+    }
+
+    console.log(`Successfully deleted files: ${fileKeys.join(", ")}`);
+    return response;
+  } catch (error) {
+    console.error(`Error deleting files from S3: ${error.message}`);
+    throw new Error(`Failed to delete files from S3: ${error.message}`);
+  }
+}

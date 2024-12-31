@@ -18,7 +18,7 @@ export default function CreateWebsite() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log("Submitting data:", data);
+    ("Submitting data:", data);
     try {
       setIsLoading(true);
 

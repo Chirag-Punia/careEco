@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
+import PrivateRoute from "./components/PrivateRoute";
 import Home from "./pages/Home";
 import Templates from "./pages/Templates";
 import Generator from "./pages/Generator";
@@ -19,7 +20,7 @@ function App() {
           autoClose={5000} 
           hideProgressBar={false} 
           newestOnTop={false} 
-          closeonPress 
+          closeOnClick 
           rtl={false} 
           pauseOnFocusLoss 
           draggable 
@@ -27,12 +28,31 @@ function App() {
           theme="light"
         />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/templates" element={<Templates />} />
-          <Route path="/generator" element={<Generator />} />
-          <Route path="/create" element={<Create />} />
+          {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+
+          {/* Protected Routes */}
+          <Route path="/" element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          } />
+          <Route path="/templates" element={
+            <PrivateRoute>
+              <Templates />
+            </PrivateRoute>
+          } />
+          <Route path="/generator" element={
+            <PrivateRoute>
+              <Generator />
+            </PrivateRoute>
+          } />
+          <Route path="/create" element={
+            <PrivateRoute>
+              <Create />
+            </PrivateRoute>
+          } />
         </Routes>
       </main>
     </div>

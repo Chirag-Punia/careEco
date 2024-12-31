@@ -1,7 +1,7 @@
 import ejs from "ejs";
-import { color } from "framer-motion";
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -22,6 +22,7 @@ const colorThemes = {
     secondary: "#dc2626",
   },
 };
+
 export async function generateWebsite(data) {
   const { businessName, description, colorTheme, layout, products } = data;
   const selectedColorTheme = colorThemes[colorTheme];
@@ -34,7 +35,6 @@ export async function generateWebsite(data) {
       return product;
     });
 
-    console.log(updatedProducts[0].imageUrl);
     const indexHtml = await ejs.renderFile(
       path.join(__dirname, "../templates/index.ejs"),
       {
@@ -45,9 +45,16 @@ export async function generateWebsite(data) {
         products: updatedProducts,
       }
     );
+
+    const scriptJs = await fs.promises.readFile(
+      path.join(__dirname, "../templates/script.js"),
+      "utf-8"
+    );
+
     return {
       files: {
         "index.html": indexHtml,
+        "script.js": scriptJs,
       },
     };
   } catch (error) {

@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.717.0",
     "@nextui-org/react": "^2.6.10",
     "autoprefixer": "^10.4.17",
     "aws-sdk": "^2.1550.0",
