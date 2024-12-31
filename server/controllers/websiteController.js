@@ -1,5 +1,5 @@
 import Website from "../models/websiteModel.js"; // Assuming Website is a model for your websites
-import { generateWebsite } from "../services/websiteGenerationService.js"; 
+import { generateWebsite } from "../services/websiteGenerator.js"; 
 // Controller for generating a website
 export const generateWebsiteController = async (req, res) => {
   try {
