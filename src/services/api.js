@@ -7,7 +7,7 @@ const token = localStorage.getItem("token");
 export async function generateWebsite(websiteData) {
   try {
     const response = await axios.post(
-      `${API_URL}/generate-website`,
+      `${API_URL}/websites/generate-website`,
       websiteData,
       {
         headers: {

@@ -171,7 +171,7 @@ document
     const email = document.getElementById("email").value;
     const message = document.getElementById("message").value;
 
-    fetch("https://careeco.onrender.com/api/send-email", {
+    fetch("https://careeco.onrender.com/api/email/send-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
