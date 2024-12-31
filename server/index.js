@@ -43,13 +43,13 @@ app.post("/api/send-email", async (req, res) => {
     const website = await Website.findOne({ businessName });
 
     if (!website) {
-      return res.status(404).send("Website not found");
+      return res.status(404).json({ success: false, message: "Website not found" });
     }
 
     const recipientEmail = website.email;
 
     if (!recipientEmail) {
-      return res.status(400).send("Email address not found");
+      return res.status(400).json({ success: false, message: "Email address not found" });
     }
 
     const mailOptions = {
@@ -61,15 +61,16 @@ app.post("/api/send-email", async (req, res) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        return res.status(500).send("Error sending email");
+        return res.status(500).json({ success: false, message: "Error sending email" });
       }
-      res.status(200).send("Email sent successfully");
+      res.status(200).json({ success: true, message: "Email sent successfully" });
     });
   } catch (error) {
     console.error("Error sending email:", error);
-    res.status(500).send("Internal server error");
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
+
 
 app.post("/api/create-payment-intent", async (req, res) => {
   const { amount, currency } = req.body;

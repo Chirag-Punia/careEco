@@ -183,9 +183,9 @@ document
         message,
       }),
     })
-      .then((response) => response.json())
+      .then(response)
       .then((data) => {
-        if (data.success) {
+        if (data) {
           alert("Your message has been sent successfully!");
         } else {
           alert("There was an issue sending your message.");
