@@ -1,17 +1,30 @@
 import Website from "../models/websiteModel.js"; // Assuming Website is a model for your websites
-
+import { generateWebsite } from "../services/websiteGenerationService.js"; 
 // Controller for generating a website
 export const generateWebsiteController = async (req, res) => {
   try {
     const { businessName, description, colorTheme, layout, products } = req.body;
 
-    // Logic to generate website
-    // Example: Call to a function that creates the website and stores it in DB
-    const website = await generateWebsiteData(businessName, description, colorTheme, layout, products); // Assumes this function exists
+    // Generate website data (HTML & JS files)
+    const websiteData = await generateWebsite({ businessName, description, colorTheme, layout, products });
+
+    // Create a new website in the database
+    const newWebsite = new Website({
+      user: req.user.id, // Assuming `req.user.id` is the authenticated user's ID
+      businessName,
+      description,
+      colorTheme,
+      layout,
+      products,
+      files: websiteData.files, // Store the generated files (HTML, JS)
+    });
+
+    // Save the website to the database
+    await newWebsite.save();
 
     res.status(201).json({
-      message: "Website generated successfully",
-      website,
+      message: "Website generated and saved successfully",
+      website: newWebsite,
     });
   } catch (error) {
     res.status(500).json({

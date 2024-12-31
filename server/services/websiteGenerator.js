@@ -23,6 +23,7 @@ const colorThemes = {
   },
 };
 
+// Function to generate website files
 export async function generateWebsite(data) {
   const { businessName, description, colorTheme, layout, products } = data;
   const selectedColorTheme = colorThemes[colorTheme];
