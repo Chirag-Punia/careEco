@@ -8,7 +8,7 @@ const WebsiteCard = ({ website, onDelete }) => {
   <h3 className="text-xl font-semibold mb-2">{website.businessName}</h3>
   <p className="text-gray-600">{website.description}</p>
   <a className="text-blue-600" href={website.websiteUrl}>Visit</a>
-  {website.images && website.images.length > 0 && (
+  {website.images > 0 && (
     <div className="mt-4">
       <img 
         src={website.images[0]} 
