@@ -10,7 +10,8 @@ import Website from "./models/websiteModel.js";
 import authRoutes from "./routes/authRoutes.js";
 import { protect } from "./middleware/auth.js";
 import { deleteFilesFromS3 } from "./services/s3Service.js";
-import Stripe from 'stripe';
+import Stripe from "stripe";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 
@@ -27,24 +28,66 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.XEMAIL,
+    pass: process.env.PASS,
+  },
+});
 
-  app.post('/api/create-payment-intent', async (req, res) => {
-    const { amount, currency } = req.body;
-  
-    try {
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: amount, // Amount in the smallest currency unit (e.g., cents)
-        currency: currency,
-      });
-  
-      res.status(200).json({
-        clientSecret: paymentIntent.client_secret,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: error.message });
+app.post("/api/send-email", async (req, res) => {
+  const { name, email, message, businessName } = req.body;
+
+  try {
+    const website = await Website.findOne({ businessName });
+
+    if (!website) {
+      return res.status(404).send("Website not found");
     }
-  });
+
+    const recipientEmail = website.email;
+
+    if (!recipientEmail) {
+      return res.status(400).send("Email address not found");
+    }
+
+    const mailOptions = {
+      from: process.env.XEMAIL,
+      to: recipientEmail,
+      subject: "New Contact Form Message",
+      text: `You have a new message from ${name} (${email}):\n\n${message}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return res.status(500).send("Error sending email");
+      }
+      res.status(200).send("Email sent successfully");
+    });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+app.post("/api/create-payment-intent", async (req, res) => {
+  const { amount, currency } = req.body;
+
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: currency,
+    });
+
+    res.status(200).json({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+});
 app.post("/api/generate-website", protect, upload, async (req, res) => {
   try {
     const websiteData = req.body;
@@ -101,6 +144,8 @@ app.post("/api/generate-website", protect, upload, async (req, res) => {
     const website = new Website({
       userId: req.user._id,
       businessName: websiteData.businessName,
+      email: websiteData.email,
+      phone: websiteData.phone,
       websiteUrl,
       scriptJsUrl,
       images: uploadedImages,

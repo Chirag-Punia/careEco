@@ -18,17 +18,18 @@ export default function CreateWebsite() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    ("Submitting data:", data);
+    console.log("Submitting data:", data);
     try {
       setIsLoading(true);
-
-     
+  
       const formData = new FormData();
       formData.append("businessName", data.businessName);
       formData.append("description", data.description);
       formData.append("colorTheme", data.colorTheme);
       formData.append("layout", data.layout);
-
+      formData.append("email", data.email);
+      formData.append("phone", data.phone);
+  
       data.products.forEach((product, index) => {
         formData.append(`products[${index}][name]`, product.name);
         formData.append(`products[${index}][price]`, product.price);
@@ -37,7 +38,7 @@ export default function CreateWebsite() {
           formData.append("images", product.image);
         }
       });
-
+  
       const result = await generateWebsite(formData);
       toast.success(`Website generated successfully! Visit: ${result.websiteUrl}`);
       navigate("/templates");
@@ -47,6 +48,7 @@ export default function CreateWebsite() {
       setIsLoading(false);
     }
   };
+  
 
   const nextStep = () => {
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
@@ -84,7 +86,8 @@ export default function CreateWebsite() {
           />
         </div>
       );
-    } else if (currentStep === 1) {
+    }
+     else if (currentStep === 1) {
       return (
         <div className="space-y-4">
           <Select

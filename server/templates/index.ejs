@@ -156,18 +156,18 @@
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12">Contact Us</h2>
             <div class="max-w-2xl mx-auto">
-                <form class="space-y-6">
+                <form id="contact-form" class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" required class="mt-1 w-full px-4 py-2 border rounded-md">
+                        <input id="name" type="text" required class="mt-1 w-full px-4 py-2 border rounded-md">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" required class="mt-1 w-full px-4 py-2 border rounded-md">
+                        <input id="email" type="email" required class="mt-1 w-full px-4 py-2 border rounded-md">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Message</label>
-                        <textarea required rows="4" class="mt-1 w-full px-4 py-2 border rounded-md"></textarea>
+                        <textarea id="message" required rows="4" class="mt-1 w-full px-4 py-2 border rounded-md"></textarea>
                     </div>
                     <button type="submit" class="w-full bg-primary text-white py-3 rounded-md hover:bg-primary-dark transition-colors">
                         Send Message
@@ -218,6 +218,7 @@
     </footer>
 
 <script src="script.js"></script>
+
 
 </body>
 </html>

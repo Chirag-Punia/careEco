@@ -95,7 +95,9 @@ function hideCheckout() {
 }
 
 function initializeStripe() {
-  const stripe = Stripe("pk_test_51OsQx4SF7WhPrPmVkQOrl6QAECtZ5QMyjNj5kj9E751zQT4lftF41wI8JrYIGlOXzq07lVJwowSnDjwYFhft8x3J00AlYcAPMw");
+  const stripe = Stripe(
+    "pk_test_51OsQx4SF7WhPrPmVkQOrl6QAECtZ5QMyjNj5kj9E751zQT4lftF41wI8JrYIGlOXzq07lVJwowSnDjwYFhft8x3J00AlYcAPMw"
+  );
   const elements = stripe.elements();
   const card = elements.create("card");
   card.mount("#card-element");
@@ -110,16 +112,19 @@ function initializeStripe() {
       const errorElement = document.getElementById("card-errors");
       errorElement.textContent = error.message;
     } else {
-      const response = await fetch("https://careeco.onrender.com/api/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: cart.total * 100, // amount in cents
-          currency: 'usd', // or any currency you're using
-        }),
-      });
+      const response = await fetch(
+        "https://careeco.onrender.com/api/create-payment-intent",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: cart.total * 100,
+            currency: "usd",
+          }),
+        }
+      );
 
       const { clientSecret } = await response.json();
 
@@ -127,7 +132,7 @@ function initializeStripe() {
         payment_method: {
           card: card,
           billing_details: {
-            name: 'Customer Name', // You can collect customer info if needed
+            name: "Customer Name",
           },
         },
       });
@@ -136,8 +141,8 @@ function initializeStripe() {
         const errorElement = document.getElementById("card-errors");
         errorElement.textContent = result.error.message;
       } else {
-        if (result.paymentIntent.status === 'succeeded') {
-          cart = { items: [], total: 0 }; // Reset the cart after successful payment
+        if (result.paymentIntent.status === "succeeded") {
+          cart = { items: [], total: 0 };
           updateCart();
           hideCheckout();
           showNotification("Order completed successfully!");
@@ -154,3 +159,40 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCart();
   }
 });
+
+document
+  .getElementById("contact-form")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const businessName = document.querySelector("header a").textContent;
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const message = document.getElementById("message").value;
+
+    fetch("https://careeco.onrender.com/api/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        businessName,
+        name,
+        email,
+        message,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          alert("Your message has been sent successfully!");
+        } else {
+          alert("There was an issue sending your message.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("There was an error, please try again later.");
+      });
+  });
