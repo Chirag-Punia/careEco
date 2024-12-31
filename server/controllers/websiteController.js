@@ -1,57 +1,62 @@
-import Website from "../models/websiteModel.js";
-import { generateWebsite } from "../services/websiteGenerator.js";
-import { uploadToS3 } from "../services/s3Service.js";
+import Website from "../models/Website.js"; // Assuming Website is a model for your websites
 
+// Controller for generating a website
 export const generateWebsiteController = async (req, res) => {
   try {
-    const websiteData = req.body;
+    const { businessName, description, colorTheme, layout, products } = req.body;
 
-    const uploadedImages = [];
+    // Logic to generate website
+    // Example: Call to a function that creates the website and stores it in DB
+    const website = await generateWebsiteData(businessName, description, colorTheme, layout, products); // Assumes this function exists
 
-    if (req.files && websiteData.products) {
-      for (let i = 0; i < websiteData.products.length; i++) {
-        const product = websiteData.products[i];
-        if (req.files[i] && !product.image) {
-          const imageBuffer = req.files[i].buffer;
-          const imageKey = `${websiteData.businessName.toLowerCase().replace(/\s+/g, "-")}/images/${Date.now()}-${product.name.toLowerCase().replace(/\s+/g, "-")}.jpg`;
-
-          const imageUrl = await uploadToS3({ [imageKey]: imageBuffer }, websiteData.businessName, "image/jpeg");
-          uploadedImages.push(imageUrl[imageKey]);
-          product.imageUrl = imageUrl;
-        }
-      }
-    }
-
-    const { files, websiteId } = await generateWebsite(websiteData, req.user._id);
-    const uploadedFiles = await uploadToS3(files, websiteData.businessName);
-
-    const websiteUrl = uploadedFiles["index.html"];
-    const scriptJsUrl = uploadedFiles["script.js"];
-
-    const website = new Website({
-      userId: req.user._id,
-      businessName: websiteData.businessName,
-      email: websiteData.email,
-      phone: websiteData.phone,
-      websiteUrl,
-      scriptJsUrl,
-      images: uploadedImages,
-      files: {
-        indexHtmlUrl: websiteUrl,
-        scriptJsUrl,
-      },
-    });
-
-    await website.save();
-
-    res.json({
-      success: true,
-      websiteUrl,
-      scriptJsUrl,
-      images: uploadedImages,
+    res.status(201).json({
+      message: "Website generated successfully",
+      website,
     });
   } catch (error) {
-    console.error("Error generating website:", error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({
+      error: error.message || "Failed to generate website",
+    });
+  }
+};
+
+// Controller for fetching user websites
+export const getUserWebsitesController = async (req, res) => {
+  try {
+    const userId = req.user.id; // Get the user ID from the authenticated user
+    const websites = await Website.find({ user: userId }); // Fetch websites for the user from the database
+
+    res.status(200).json(websites);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message || "Failed to fetch websites",
+    });
+  }
+};
+
+// Controller for deleting a website
+export const deleteWebsiteController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id; // Get the user ID from the authenticated user
+
+    // Find the website and ensure it belongs to the user
+    const website = await Website.findOne({ _id: id, user: userId });
+    if (!website) {
+      return res.status(404).json({
+        error: "Website not found or unauthorized",
+      });
+    }
+
+    // Delete the website
+    await Website.findByIdAndDelete(id);
+
+    res.status(200).json({
+      message: "Website deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message || "Failed to delete website",
+    });
   }
 };
