@@ -10,6 +10,7 @@ import Website from "./models/websiteModel.js";
 import authRoutes from "./routes/authRoutes.js";
 import { protect } from "./middleware/auth.js";
 import { deleteFilesFromS3 } from "./services/s3Service.js";
+import Stripe from 'stripe';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const storage = multer.memoryStorage();
 const upload = multer({ storage }).array("images");
 
@@ -25,6 +27,24 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
 
+
+  app.post('/api/create-payment-intent', async (req, res) => {
+    const { amount, currency } = req.body;
+  
+    try {
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount, // Amount in the smallest currency unit (e.g., cents)
+        currency: currency,
+      });
+  
+      res.status(200).json({
+        clientSecret: paymentIntent.client_secret,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error.message });
+    }
+  });
 app.post("/api/generate-website", protect, upload, async (req, res) => {
   try {
     const websiteData = req.body;

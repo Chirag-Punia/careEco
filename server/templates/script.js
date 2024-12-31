@@ -8,7 +8,6 @@ function addToCart(productId) {
     .then((response) => response.json())
     .then((product) => {
       const existingItem = cart.items.find((item) => item._id === productId);
-      cart;
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
@@ -96,7 +95,7 @@ function hideCheckout() {
 }
 
 function initializeStripe() {
-  const stripe = Stripe("your_publishable_key");
+  const stripe = Stripe("pk_test_51OsQx4SF7WhPrPmVkQOrl6QAECtZ5QMyjNj5kj9E751zQT4lftF41wI8JrYIGlOXzq07lVJwowSnDjwYFhft8x3J00AlYcAPMw");
   const elements = stripe.elements();
   const card = elements.create("card");
   card.mount("#card-element");
@@ -111,25 +110,38 @@ function initializeStripe() {
       const errorElement = document.getElementById("card-errors");
       errorElement.textContent = error.message;
     } else {
-      const response = await fetch(
-        "https://careeco.onrender.com/api/process-payment",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token: token.id,
-            amount: cart.total * 100,
-          }),
-        }
-      );
+      const response = await fetch("https://careeco.onrender.com/api/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: cart.total * 100, // amount in cents
+          currency: 'usd', // or any currency you're using
+        }),
+      });
 
-      if (response.ok) {
-        cart = { items: [], total: 0 };
-        updateCart();
-        hideCheckout();
-        showNotification("Order completed successfully!");
+      const { clientSecret } = await response.json();
+
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: card,
+          billing_details: {
+            name: 'Customer Name', // You can collect customer info if needed
+          },
+        },
+      });
+
+      if (result.error) {
+        const errorElement = document.getElementById("card-errors");
+        errorElement.textContent = result.error.message;
+      } else {
+        if (result.paymentIntent.status === 'succeeded') {
+          cart = { items: [], total: 0 }; // Reset the cart after successful payment
+          updateCart();
+          hideCheckout();
+          showNotification("Order completed successfully!");
+        }
       }
     }
   });
