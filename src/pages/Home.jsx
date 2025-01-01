@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { websiteApi } from '../services/api';
-import WebsiteList from '../components/website/WebsiteList';
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { websiteApi } from "../services/api";
+import WebsiteList from "../components/website/WebsiteList";
 
 const Home = () => {
   const [websites, setWebsites] = useState([]);
@@ -16,20 +16,20 @@ const Home = () => {
       const response = await websiteApi.getUserWebsites();
       setWebsites(response.data.websites);
     } catch (error) {
-      toast.error('Failed to fetch websites');
+      toast.error("Failed to fetch websites");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (websiteId) => {
-    if (window.confirm('Are you sure you want to delete this website?')) {
+    if (window.confirm("Are you sure you want to delete this website?")) {
       try {
         await websiteApi.deleteWebsite(websiteId);
-        setWebsites(websites.filter(w => w._id !== websiteId));
-        toast.success('Website deleted successfully');
+        setWebsites(websites.filter((w) => w._id !== websiteId));
+        toast.success("Website deleted successfully");
       } catch (error) {
-        toast.error('Failed to delete website');
+        toast.error("Failed to delete website");
       }
     }
   };
@@ -48,10 +48,7 @@ const Home = () => {
         <h1 className="text-3xl font-bold text-gray-900">My Websites</h1>
       </div>
 
-      <WebsiteList 
-        websites={websites}
-        onDelete={handleDelete}
-      />
+      <WebsiteList websites={websites} onDelete={handleDelete} />
     </div>
   );
 };

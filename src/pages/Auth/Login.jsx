@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { FaEnvelope, FaLock } from 'react-icons/fa';
-import axios from 'axios';
-import { RingLoader } from 'react-spinners';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FaEnvelope, FaLock } from "react-icons/fa";
+import axios from "axios";
+import { RingLoader } from "react-spinners";
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,12 +25,15 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('https://careeco.onrender.com/api/auth/login', formData);
-      localStorage.setItem('token', response.data.token);
-      toast.success('Login successful!');
-      navigate('/');
+      const response = await axios.post(
+        "https://careeco.onrender.com/api/auth/login",
+        formData
+      );
+      localStorage.setItem("token", response.data.token);
+      toast.success("Login successful!");
+      navigate("/");
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Login failed');
+      toast.error(error.response?.data?.message || "Login failed");
     } finally {
       setIsLoading(false);
     }
@@ -77,11 +80,7 @@ const Login = () => {
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              {isLoading ? (
-                <RingLoader color="#fff" size={24} />
-              ) : (
-                'Sign in'
-              )}
+              {isLoading ? <RingLoader color="#fff" size={24} /> : "Sign in"}
             </button>
           </div>
         </form>

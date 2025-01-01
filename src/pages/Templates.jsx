@@ -6,16 +6,15 @@ const templates = [
     name: "Pharmacy Plus",
     image: "https://placehold.co/600x400",
     description: "Modern pharmacy website template with online ordering system",
-    industry: "Pharmacy"
+    industry: "Pharmacy",
   },
   {
     id: 2,
     name: "Beauty Hub",
     image: "https://placehold.co/600x400",
     description: "Elegant cosmetics store template with product showcase",
-    industry: "Cosmetics"
+    industry: "Cosmetics",
   },
- 
 ];
 
 export default function Templates() {

@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Card, Button, Input, Textarea, Select, SelectItem } from "@nextui-org/react";
+import {
+  Card,
+  Button,
+  Input,
+  Textarea,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -18,22 +25,18 @@ export default function CreateWebsite() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log("Submitting data:", data);
     try {
       setIsLoading(true);
-      
-     
+
       const formData = new FormData();
-      
-     
+
       formData.append("businessName", data.businessName);
       formData.append("description", data.description);
       formData.append("colorTheme", data.colorTheme);
-      formData.append("layout", data.layout); 
+      formData.append("layout", data.layout);
       formData.append("email", data.email);
       formData.append("phone", data.phone);
-  
-     
+
       data.products.forEach((product, index) => {
         formData.append(`products[${index}][name]`, product.name);
         formData.append(`products[${index}][price]`, product.price);
@@ -42,10 +45,11 @@ export default function CreateWebsite() {
           formData.append("images", product.image);
         }
       });
-  
-     
+
       const result = await generateWebsite(formData);
-      toast.success(`Website generated successfully! Visit: ${result.websiteUrl}`);
+      toast.success(
+        `Website generated successfully! Visit: ${result.websiteUrl}`
+      );
       navigate("/templates");
     } catch (error) {
       toast.error(`Failed to generate website: ${error.message}`);
@@ -53,8 +57,6 @@ export default function CreateWebsite() {
       setIsLoading(false);
     }
   };
-  
-  
 
   const nextStep = () => {
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
@@ -92,20 +94,18 @@ export default function CreateWebsite() {
           />
         </div>
       );
-    }
-     else if (currentStep === 1) {
+    } else if (currentStep === 1) {
       return (
         <div className="space-y-4">
           <Select
-  label="Color Theme"
-  placeholder="Choose your color theme"
-  {...register("colorTheme", { required: true })}
->
-  <SelectItem key="purple-blue">Purple & Blue</SelectItem>
-  <SelectItem key="green-teal">Green & Teal</SelectItem>
-  <SelectItem key="orange-red">Orange & Red</SelectItem>
-</Select>
-
+            label="Color Theme"
+            placeholder="Choose your color theme"
+            {...register("colorTheme", { required: true })}
+          >
+            <SelectItem key="purple-blue">Purple & Blue</SelectItem>
+            <SelectItem key="green-teal">Green & Teal</SelectItem>
+            <SelectItem key="orange-red">Orange & Red</SelectItem>
+          </Select>
 
           <Select
             label="Layout Style"
@@ -123,7 +123,10 @@ export default function CreateWebsite() {
       const products = watch("products");
 
       const addProduct = () => {
-        const updatedProducts = [...products, { name: "", price: "", description: "", image: null }];
+        const updatedProducts = [
+          ...products,
+          { name: "", price: "", description: "", image: null },
+        ];
         setValue("products", updatedProducts);
       };
 
@@ -154,7 +157,9 @@ export default function CreateWebsite() {
               <Input
                 label="Description"
                 placeholder="Enter product description"
-                {...register(`products.${index}.description`, { required: true })}
+                {...register(`products.${index}.description`, {
+                  required: true,
+                })}
                 fullWidth
               />
               <Input
@@ -190,14 +195,18 @@ export default function CreateWebsite() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h1 className="text-4xl font-bold mb-8 text-center">Create Your Website</h1>
+      <h1 className="text-4xl font-bold mb-8 text-center">
+        Create Your Website
+      </h1>
 
       <div className="flex justify-between mb-8">
         {steps.map((step, index) => (
           <div
             key={step}
             className={`flex-1 text-center ${
-              index === currentStep ? "text-purple-600 font-bold" : "text-gray-400"
+              index === currentStep
+                ? "text-purple-600 font-bold"
+                : "text-gray-400"
             }`}
           >
             {step}

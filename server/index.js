@@ -43,13 +43,17 @@ app.post("/api/email/send-email", async (req, res) => {
     const website = await Website.findOne({ businessName });
 
     if (!website) {
-      return res.status(404).json({ success: false, message: "Website not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Website not found" });
     }
 
     const recipientEmail = website.email;
 
     if (!recipientEmail) {
-      return res.status(400).json({ success: false, message: "Email address not found" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Email address not found" });
     }
 
     const mailOptions = {
@@ -61,16 +65,19 @@ app.post("/api/email/send-email", async (req, res) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        return res.status(500).json({ success: false, message: "Error sending email" });
+        return res
+          .status(500)
+          .json({ success: false, message: "Error sending email" });
       }
-      res.status(200).json({ success: true, message: "Email sent successfully" });
+      res
+        .status(200)
+        .json({ success: true, message: "Email sent successfully" });
     });
   } catch (error) {
     console.error("Error sending email:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
-
 
 app.post("/api/create-payment-intent", async (req, res) => {
   const { amount, currency } = req.body;
@@ -89,87 +96,91 @@ app.post("/api/create-payment-intent", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-app.post("/api/websites/generate-website", protect, upload, async (req, res) => {
-  try {
-    const websiteData = req.body;
-    console.log(websiteData)
+app.post(
+  "/api/websites/generate-website",
+  protect,
+  upload,
+  async (req, res) => {
+    try {
+      const websiteData = req.body;
 
-    const uploadedImages = [];
+      const uploadedImages = [];
 
-    if (req.files && websiteData.products) {
-      for (let i = 0; i < websiteData.products.length; i++) {
-        const product = websiteData.products[i];
-        if (req.files[i] && !product.image) {
-          const imageBuffer = req.files[i].buffer;
+      if (req.files && websiteData.products) {
+        for (let i = 0; i < websiteData.products.length; i++) {
+          const product = websiteData.products[i];
+          if (req.files[i] && !product.image) {
+            const imageBuffer = req.files[i].buffer;
 
-          const imageKey = `${websiteData.businessName
-            .toLowerCase()
-            .replace(/\s+/g, "-")}/images/${Date.now()}-${product.name
-            .toLowerCase()
-            .replace(/\s+/g, "-")}.jpg`;
+            const imageKey = `${websiteData.businessName
+              .toLowerCase()
+              .replace(/\s+/g, "-")}/images/${Date.now()}-${product.name
+              .toLowerCase()
+              .replace(/\s+/g, "-")}.jpg`;
 
-          const imageUrl = await uploadToS3(
-            { [imageKey]: imageBuffer },
-            websiteData.businessName,
-            "image/jpeg"
-          );
+            const imageUrl = await uploadToS3(
+              { [imageKey]: imageBuffer },
+              websiteData.businessName,
+              "image/jpeg"
+            );
 
-          uploadedImages.push(imageUrl[imageKey]);
-          product.imageUrl = imageUrl;
-          imageUrl;
+            uploadedImages.push(imageUrl[imageKey]);
+            product.imageUrl = imageUrl;
+            imageUrl;
 
-          const newProduct = new Product({
-            name: product.name,
-            description: product.description,
-            price: product.price,
-            imageUrl: Object.values(imageUrl)[0],
-            businessName: websiteData.businessName,
-            userId: req.user._id,
-          });
+            const newProduct = new Product({
+              name: product.name,
+              description: product.description,
+              price: product.price,
+              imageUrl: Object.values(imageUrl)[0],
+              businessName: websiteData.businessName,
+              userId: req.user._id,
+            });
 
-          const savedProduct = await newProduct.save();
-          product._id = savedProduct._id;
+            const savedProduct = await newProduct.save();
+            product._id = savedProduct._id;
+          }
         }
       }
+
+      const { files, websiteId } = await generateWebsite(
+        websiteData,
+        req.user._id
+      );
+
+      const uploadedFiles = await uploadToS3(files, websiteData.businessName);
+
+      const websiteUrl = uploadedFiles["index.html"];
+      const scriptJsUrl = uploadedFiles["script.js"];
+
+      const website = new Website({
+        userId: req.user._id,
+        businessName: websiteData.businessName,
+        email: websiteData.email,
+        phone: websiteData.phone,
+        websiteUrl,
+        scriptJsUrl,
+        images: uploadedImages,
+        files: {
+          indexHtmlUrl: websiteUrl,
+          scriptJsUrl: scriptJsUrl,
+        },
+      });
+
+      await website.save();
+
+      res.json({
+        success: true,
+        websiteUrl,
+        scriptJsUrl,
+        images: uploadedImages,
+      });
+    } catch (error) {
+      console.error("Error generating website:", error);
+      res.status(500).json({ success: false, error: error.message });
     }
-
-    const { files, websiteId } = await generateWebsite(
-      websiteData,
-      req.user._id
-    );
-
-    const uploadedFiles = await uploadToS3(files, websiteData.businessName);
-
-    const websiteUrl = uploadedFiles["index.html"];
-    const scriptJsUrl = uploadedFiles["script.js"];
-
-    const website = new Website({
-      userId: req.user._id,
-      businessName: websiteData.businessName,
-      email: websiteData.email,
-      phone: websiteData.phone,
-      websiteUrl,
-      scriptJsUrl,
-      images: uploadedImages,
-      files: {
-        indexHtmlUrl: websiteUrl,
-        scriptJsUrl: scriptJsUrl,
-      },
-    });
-
-    await website.save();
-
-    res.json({
-      success: true,
-      websiteUrl,
-      scriptJsUrl,
-      images: uploadedImages,
-    });
-  } catch (error) {
-    console.error("Error generating website:", error);
-    res.status(500).json({ success: false, error: error.message });
   }
-});
+);
 
 app.get("/api/products", protect, async (req, res) => {
   try {

@@ -1,4 +1,11 @@
-import { Card, Input, Select, SelectItem, Button, Textarea } from "@nextui-org/react";
+import {
+  Card,
+  Input,
+  Select,
+  SelectItem,
+  Button,
+  Textarea,
+} from "@nextui-org/react";
 import { useForm } from "react-hook-form";
 
 const industries = [
@@ -16,14 +23,13 @@ export default function Generator() {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
-    (data);
-   
+    data;
   };
 
   return (
     <div className="max-w-3xl mx-auto">
       <h1 className="text-4xl font-bold mb-8 text-center">Website Generator</h1>
-      
+
       <Card className="p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
@@ -34,8 +40,8 @@ export default function Generator() {
               isRequired
             />
 
-            <Select 
-              label="Industry" 
+            <Select
+              label="Industry"
               placeholder="Select your industry"
               {...register("industry")}
               isRequired
@@ -47,8 +53,8 @@ export default function Generator() {
               ))}
             </Select>
 
-            <Select 
-              label="Color Theme" 
+            <Select
+              label="Color Theme"
               placeholder="Choose your color theme"
               {...register("colorTheme")}
               isRequired

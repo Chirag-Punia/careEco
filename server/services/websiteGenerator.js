@@ -27,7 +27,6 @@ const colorThemes = {
 export async function generateWebsite(data) {
   const { businessName, description, colorTheme, layout, products } = data;
   const selectedColorTheme = colorThemes[colorTheme];
-  console.log({ businessName, description, colorTheme, layout, products });
 
   try {
     let layoutTemplate = "index.ejs";

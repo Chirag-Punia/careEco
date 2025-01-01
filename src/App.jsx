@@ -15,16 +15,16 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <main className="container mx-auto px-4 py-8">
-        <ToastContainer 
-          position="top-right" 
-          autoClose={5000} 
-          hideProgressBar={false} 
-          newestOnTop={false} 
-          closeOnClick 
-          rtl={false} 
-          pauseOnFocusLoss 
-          draggable 
-          pauseOnHover 
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
           theme="light"
         />
         <Routes>
@@ -33,26 +33,38 @@ function App() {
           <Route path="/signup" element={<Signup />} />
 
           {/* Protected Routes */}
-          <Route path="/" element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          } />
-          <Route path="/templates" element={
-            <PrivateRoute>
-              <Templates />
-            </PrivateRoute>
-          } />
-          <Route path="/generator" element={
-            <PrivateRoute>
-              <Generator />
-            </PrivateRoute>
-          } />
-          <Route path="/create" element={
-            <PrivateRoute>
-              <Create />
-            </PrivateRoute>
-          } />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/templates"
+            element={
+              <PrivateRoute>
+                <Templates />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/generator"
+            element={
+              <PrivateRoute>
+                <Generator />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/create"
+            element={
+              <PrivateRoute>
+                <Create />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </main>
     </div>
