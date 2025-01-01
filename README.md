@@ -1,78 +1,126 @@
-# Website Boss
+# Website Boss - Custom Website Builder
 
-A modern, full-featured web application template built with React, TypeScript, and Tailwind CSS.
+A powerful website builder platform that allows users to create and deploy custom websites with ease. Built with React and modern web technologies.
 
-![Website Boss](https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2426&ixlib=rb-4.0.3)
+![Website Builder](https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&q=80&w=2426&ixlib=rb-4.0.3)
 
-## ✨ Features
+## ✨ Key Features
 
-- 🎨 **Modern UI** - Built with React 18 and Tailwind CSS
-- 🔒 **Type-Safe** - Written in TypeScript for better development experience
-- ⚡️ **Lightning Fast** - Powered by Vite for rapid development
-- 📱 **Responsive** - Mobile-first design approach
-- 🧩 **Component-Driven** - Modular architecture for better maintainability
-- 🎯 **Production Ready** - Optimized for deployment
+- 🎨 **Website Builder** - Drag-and-drop interface to create custom websites
+- 🚀 **Instant Deployment** - One-click deployment to Amazon S3
+- 🔐 **User Authentication** - Secure login/signup system
+- 💼 **Project Management** - Save and manage multiple website projects
+- 📱 **Responsive Templates** - Mobile-first design templates
+- 🔄 **Live Preview** - Real-time preview of your website changes
 
-## 🚀 Quick Start
+## 🎯 For Website Creators
+
+- Create an account to start building
+- Choose from professional templates
+- Customize your website with an intuitive builder
+- Deploy instantly with one click
+- Get a shareable link for your website
+- Manage all your website projects in one place
+
+## 🛠️ Technical Features
+
+- **Authentication System**
+  - Secure user signup/login
+  - Password recovery
+  - Profile management
+
+- **Website Builder**
+  - Component-based editor
+  - Real-time preview
+  - Custom domain support
+  - Asset management
+
+- **Deployment**
+  - Automated S3 deployment
+  - Custom domain configuration
+  - SSL certificate management
+  - CDN integration
+
+## 🚀 Getting Started
+
+1. **Create an Account**
+   ```
+   Visit our platform and sign up for a new account
+   ```
+
+2. **Start Building**
+   ```
+   Choose a template or start from scratch
+   Customize your website using our builder
+   ```
+
+3. **Deploy**
+   ```
+   Click deploy to publish your website
+   Get your unique website URL
+   ```
+
+## 💻 Development Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/website-boss.git
-
 # Install dependencies
 npm install
 
 # Start development server
 npm run dev
+
+# Build for production
+npm run build
 ```
 
-## 📦 Tech Stack
+## 🔧 Environment Variables
 
-- [React](https://react.dev) - UI Framework
-- [TypeScript](https://www.typescriptlang.org/) - Language
-- [Tailwind CSS](https://tailwindcss.com) - Styling
-- [Vite](https://vitejs.dev) - Build Tool
-- [Lucide React](https://lucide.dev) - Icons
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_key
+VITE_AWS_BUCKET_NAME=your_s3_bucket
+```
+
+## 📚 Tech Stack
+
+- **Frontend**
+  - React 18
+  - TypeScript
+  - Tailwind CSS
+  - Lucide Icons
+
+- **Authentication**
+  - Supabase Auth
+
+- **Deployment**
+  - Amazon S3
+  - CloudFront CDN
 
 ## 📁 Project Structure
 
 ```
 src/
-├── components/     # Reusable UI components
+├── components/     # UI Components
+│   ├── builder/   # Website builder components
+│   ├── auth/      # Authentication components
+│   └── common/    # Shared components
 ├── pages/         # Application pages
+├── services/      # API and deployment services
 ├── hooks/         # Custom React hooks
-├── utils/         # Helper functions
-├── types/         # TypeScript type definitions
-└── App.tsx        # Main application component
+└── types/         # TypeScript definitions
 ```
 
-## 🛠️ Available Scripts
+## 🤝 Support
 
-| Command         | Description                   |
-|----------------|-------------------------------|
-| `npm run dev`  | Start development server      |
-| `npm run build`| Build for production         |
-| `npm run lint` | Run ESLint                   |
-| `npm preview`  | Preview production build      |
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Need help? Contact us at:
+- 📧 support@websiteboss.com
+- 💬 Discord Community
+- 📖 Documentation
 
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-- [React Documentation](https://react.dev)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [Vite Documentation](https://vitejs.dev/guide)
-
 ---
 
-<p align="center">Made with ❤️ by Your Name</p>
+<p align="center">Build your dream website today with Website Boss! 🚀</p>
