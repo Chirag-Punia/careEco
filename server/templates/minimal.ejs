@@ -4,58 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= businessName %> - Minimal E-commerce</title>
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: '#1a1a1a',
-              'primary-dark': '#000000',
-              secondary: '#f5f5f5'
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+              primary: '<%= colorTheme.primary %>',
+              'primary-dark': '<%= colorTheme.primaryDark %>',
+              secondary: '<%= colorTheme.secondary %>'
             },
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
             }
-          }
         }
-      }
     </script>
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stripe JS -->
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body class="font-sans bg-white">
-    <!-- Minimal Header -->
+
+    <!-- Header -->
     <header class="fixed w-full bg-white border-b border-gray-100 z-50">
-        <nav class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <a href="#" class="text-2xl font-light tracking-wider"><%= businessName %></a>
-                <div class="hidden md:flex items-center space-x-12">
-                    <a href="#home" class="text-gray-600 hover:text-black transition-colors text-sm">HOME</a>
-                    <a href="#products" class="text-gray-600 hover:text-black transition-colors text-sm">SHOP</a>
-                    <a href="#contact" class="text-gray-600 hover:text-black transition-colors text-sm">CONTACT</a>
-                    <div class="relative group">
-                        <button class="relative p-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                            </svg>
-                            <span id="cart-count" class="absolute -top-2 -right-2 w-4 h-4 text-xs flex items-center justify-center text-white bg-black rounded-full">0</span>
-                        </button>
-                        
-                        <!-- Cart Dropdown -->
-                        <div class="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl hidden group-hover:block">
-                            <div id="cart-items" class="p-4">
-                                <!-- Cart items will be dynamically inserted here -->
+        <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="text-2xl font-light tracking-wider"><%= businessName %></a>
+            <div class="hidden md:flex items-center space-x-12">
+                <a href="#home" class="text-gray-600 hover:text-black transition-colors text-sm">HOME</a>
+                <a href="#products" class="text-gray-600 hover:text-black transition-colors text-sm">SHOP</a>
+                <a href="#contact" class="text-gray-600 hover:text-black transition-colors text-sm">CONTACT</a>
+
+                <!-- Cart Dropdown -->
+                <div class="relative group">
+                    <button class="relative p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span id="cart-count" class="absolute -top-2 -right-2 w-4 h-4 text-xs flex items-center justify-center text-white bg-black rounded-full">0</span>
+                    </button>
+                    
+                    <!-- Cart Dropdown Content -->
+                    <div class="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl hidden group-hover:block">
+                        <div id="cart-items" class="p-4">
+                            <!-- Cart items will be dynamically inserted here -->
+                        </div>
+                        <div class="border-t p-4">
+                            <div class="flex justify-between mb-4">
+                                <span class="font-semibold">Total:</span>
+                                <span id="cart-total" class="font-bold">$0.00</span>
                             </div>
-                            <div class="border-t p-4">
-                                <div class="flex justify-between mb-4">
-                                    <span class="font-semibold">Total:</span>
-                                    <span id="cart-total" class="font-bold">$0.00</span>
-                                </div>
-                                <button onClick="showCheckout()" class="w-full bg-black text-white py-2 hover:bg-gray-900 transition-colors">
-                                    Checkout
-                                </button>
-                            </div>
+                            <button onClick="showCheckout()" class="w-full bg-black text-white py-2 hover:bg-gray-900 transition-colors">
+                                Checkout
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -63,7 +70,7 @@
         </nav>
     </header>
 
-    <!-- Minimal Hero -->
+    <!-- Hero Section -->
     <section id="home" class="h-screen flex items-center justify-center bg-secondary">
         <div class="text-center px-4">
             <h1 class="text-6xl font-light mb-6"><%= businessName %></h1>
@@ -74,7 +81,7 @@
         </div>
     </section>
 
-    <!-- Minimal Products Grid -->
+    <!-- Product Grid -->
     <section id="products" class="container mx-auto px-6 py-24">
         <h2 class="text-3xl font-light text-center mb-16">Collection</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -107,9 +114,9 @@
                             </svg>
                         </button>
                     </div>
-                    
+
                     <form id="payment-form" class="space-y-6">
-                        <!-- Customer Information -->
+                        <!-- Customer Info -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-light">Customer Information</h3>
                             <div class="grid grid-cols-2 gap-4">
@@ -128,11 +135,11 @@
                             </div>
                         </div>
 
-                        <!-- Payment Information -->
+                        <!-- Payment Info -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-light">Payment Information</h3>
                             <div id="card-element" class="mt-1 p-4 border rounded-md">
-                                <!-- Stripe Card Element will be inserted here -->
+                                <!-- Stripe Card Element -->
                             </div>
                             <div id="card-errors" class="text-red-600 text-sm"></div>
                         </div>
@@ -146,7 +153,7 @@
         </div>
     </div>
 
-    <!-- Minimal Contact -->
+    <!-- Contact Section -->
     <section id="contact" class="bg-secondary py-24">
         <div class="container mx-auto px-6">
             <div class="max-w-xl mx-auto text-center">
@@ -163,13 +170,15 @@
         </div>
     </section>
 
-    <!-- Minimal Footer -->
+    <!-- Footer -->
     <footer class="bg-white py-12">
         <div class="container mx-auto px-6 text-center">
             <p class="text-sm text-gray-600">&copy; <%= new Date().getFullYear() %> <%= businessName %>. All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- Main JS File -->
     <script type="module" src="/js/main.js"></script>
+
 </body>
 </html>
