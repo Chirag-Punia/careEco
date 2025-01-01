@@ -22,18 +22,18 @@ export default function CreateWebsite() {
     try {
       setIsLoading(true);
       
-      // Create a new FormData object
+     
       const formData = new FormData();
       
-      // Append business-related fields
+     
       formData.append("businessName", data.businessName);
       formData.append("description", data.description);
       formData.append("colorTheme", data.colorTheme);
-      formData.append("layout", data.layout);  // Send the selected layout to the backend
+      formData.append("layout", data.layout); 
       formData.append("email", data.email);
       formData.append("phone", data.phone);
   
-      // Append products data
+     
       data.products.forEach((product, index) => {
         formData.append(`products[${index}][name]`, product.name);
         formData.append(`products[${index}][price]`, product.price);
@@ -43,7 +43,7 @@ export default function CreateWebsite() {
         }
       });
   
-      // Call backend API to generate website
+     
       const result = await generateWebsite(formData);
       toast.success(`Website generated successfully! Visit: ${result.websiteUrl}`);
       navigate("/templates");
