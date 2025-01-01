@@ -14,9 +14,14 @@ import Stripe from "stripe";
 import nodemailer from "nodemailer";
 
 dotenv.config();
+const corsOptions = {
+    origin: 'https://care-eco.vercel.app', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
 const app = express();
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
