@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import axios from "axios";
+import { RingLoader } from "react-spinners";
 
 const Signup = () => {
   const navigate = useNavigate();
