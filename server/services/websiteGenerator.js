@@ -31,7 +31,7 @@ export async function generateWebsite(data) {
 
   try {
     let layoutTemplate = "index.ejs";
-    if (layout === "luxury") {
+    if (layout === "classic") {
       layoutTemplate = "luxury.ejs";
     } else if (layout === "minimal") {
       layoutTemplate = "minimal.ejs";

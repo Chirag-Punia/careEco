@@ -89,7 +89,7 @@ app.post("/api/create-payment-intent", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-app.post("/api/webistes/generate-website", protect, upload, async (req, res) => {
+app.post("/api/websites/generate-website", protect, upload, async (req, res) => {
   try {
     const websiteData = req.body;
     console.log(websiteData)
