@@ -26,7 +26,6 @@ A powerful website builder platform that allows users to create and deploy custo
 
 - **Authentication System**
   - Secure user signup/login
-  - Password recovery
   - Profile management
 
 - **Website Builder**
