@@ -6,7 +6,7 @@ A powerful website builder platform that allows users to create and deploy custo
 
 ## ✨ Key Features
 
-- 🎨 **Website Builder** - Drag-and-drop interface to create custom websites
+- 🎨 **Website Builder** - Create custom websites
 - 🚀 **Instant Deployment** - One-click deployment to Amazon S3
 - 🔐 **User Authentication** - Secure login/signup system
 - 💼 **Project Management** - Save and manage multiple website projects
@@ -37,8 +37,6 @@ A powerful website builder platform that allows users to create and deploy custo
 
 - **Deployment**
   - Automated S3 deployment
-  - Custom domain configuration
-  - SSL certificate management
   - CDN integration
 
 ## 🚀 Getting Started
@@ -76,21 +74,28 @@ npm run build
 ## 🔧 Environment Variables
 
 ```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_key
-VITE_AWS_BUCKET_NAME=your_s3_bucket
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_REGION=eu-north-1
+AWS_S3_BUCKET=
+MONGODB_URI=
+JWT_SECRET=
+STRIPE_SECRET_KEY=
+PASS=
+XEMAIL=
 ```
 
 ## 📚 Tech Stack
 
 - **Frontend**
   - React 18
-  - TypeScript
+  - JavaScript
   - Tailwind CSS
-  - Lucide Icons
+  - NextUI
 
 - **Authentication**
-  - Supabase Auth
+  - MongoDB
+  - JWT
 
 - **Deployment**
   - Amazon S3
@@ -99,23 +104,15 @@ VITE_AWS_BUCKET_NAME=your_s3_bucket
 ## 📁 Project Structure
 
 ```
+server/
 src/
 ├── components/     # UI Components
-│   ├── builder/   # Website builder components
 │   ├── auth/      # Authentication components
-│   └── common/    # Shared components
 ├── pages/         # Application pages
 ├── services/      # API and deployment services
 ├── hooks/         # Custom React hooks
-└── types/         # TypeScript definitions
 ```
 
-## 🤝 Support
-
-Need help? Contact us at:
-- 📧 support@websiteboss.com
-- 💬 Discord Community
-- 📖 Documentation
 
 ## 📝 License
 
